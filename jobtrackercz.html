@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JobTrackerCZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080b10;
+    --bg2: #0d1219;
+    --bg3: #111820;
+    --border: #1c2535;
+    --border2: #243040;
+    --amber: #f0a500;
+    --amber-dim: rgba(240,165,0,0.12);
+    --amber-glow: rgba(240,165,0,0.06);
+    --blue: #4a9eff;
+    --blue-dim: rgba(74,158,255,0.12);
+    --green: #2dd4a0;
+    --green-dim: rgba(45,212,160,0.1);
+    --red: #ff4d6a;
+    --red-dim: rgba(255,77,106,0.1);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.1);
+    --text: #e2e8f4;
+    --text2: #8899b0;
+    --text3: #445566;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* === LAYOUT === */
+  .app { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* === HEADER === */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    background: rgba(8,11,16,0.95);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--amber);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--amber);
+    letter-spacing: -0.5px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  .logo-text {
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: var(--amber); }
+
+  .logo-sub {
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 0.15em;
+    margin-top: 1px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .nav-btn {
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .nav-btn:hover { color: var(--text2); border-color: var(--border2); }
+  .nav-btn.active { color: var(--amber); border-color: var(--amber); background: var(--amber-glow); }
+
+  /* === PAGES === */
+  .page { display: none; flex: 1; }
+  .page.active { display: block; }
+
+  /* === STATS BAR === */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .stat {
+    padding: 14px 8px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .stat:last-child { border-right: none; }
+  .stat:hover { background: var(--bg3); }
+  .stat.active { background: var(--bg3); }
+
+  .stat-num {
+    font-family: var(--sans);
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 8px;
+    color: var(--text3);
+    letter-spacing: 0.14em;
+  }
+
+  /* === TOOLBAR === */
+  .toolbar {
+    padding: 12px 32px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 8px;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    margin-right: 4px;
+    text-transform: uppercase;
+  }
+
+  .filter-btn {
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover { border-color: var(--border2); color: var(--text2); }
+  .filter-btn.active { border-color: var(--amber); color: var(--amber); background: var(--amber-glow); }
+
+  .spacer { flex: 1; }
+
+  .toolbar-right { display: flex; gap: 8px; align-items: center; }
+
+  .count-badge {
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+  }
+
+  /* === PRIMARY BUTTON === */
+  .btn-primary {
+    padding: 8px 18px;
+    background: var(--amber);
+    color: var(--bg);
+    border: none;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary:hover { background: #ffc02a; transform: translateY(-1px); }
+
+  .btn-secondary {
+    padding: 7px 14px;
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
+
+  .btn-danger {
+    padding: 5px 10px;
+    background: transparent;
+    color: var(--text3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-danger:hover { border-color: var(--red); color: var(--red); }
+
+  /* === JOB LIST === */
+  .job-list { padding: 16px 32px; max-width: 1200px; }
+
+  .empty-state {
+    text-align: center;
+    padding: 100px 20px;
+    color: var(--text3);
+  }
+
+  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.2; }
+  .empty-text { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+
+  /* === JOB CARD === */
+  .job-card {
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg2);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .job-card:hover { border-color: var(--border2); }
+  .job-card.expanded { border-color: var(--border2); }
+
+  .job-row {
+    display: grid;
+    grid-template-columns: 14px 1fr auto auto auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+  }
+
+  .job-accent { width: 3px; height: 36px; border-radius: 2px; flex-shrink: 0; }
+
+  .job-main { min-width: 0; }
+
+  .job-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .job-meta {
+    font-size: 10px;
+    color: var(--text3);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .job-company { color: var(--text2); }
+  .job-dot { color: var(--border2); }
+
+  .job-mode {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+
+  .mode-hybrid { color: var(--blue); border-color: rgba(74,158,255,0.3); background: var(--blue-dim); }
+  .mode-on-site { color: var(--purple); border-color: rgba(167,139,250,0.3); background: var(--purple-dim); }
+  .mode-remote { color: var(--green); border-color: rgba(45,212,160,0.3); background: var(--green-dim); }
+
+  .lang-badge {
+    font-size: 7px;
+    letter-spacing: 0.1em;
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--blue);
+    border: 1px solid rgba(74,158,255,0.3);
+  }
+
+  .job-score {
+    text-align: center;
+    min-width: 44px;
+  }
+
+  .score-num {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .score-label { font-size: 7px; color: var(--text3); letter-spacing: 0.1em; }
+
+  .job-salary { text-align: right; min-width: 80px; }
+  .salary-num { font-size: 10px; color: var(--text2); margin-bottom: 2px; }
+  .salary-date { font-size: 8px; color: var(--text3); }
+
+  .status-pill {
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-align: center;
+    min-width: 72px;
+    border: 1px solid;
+    text-transform: uppercase;
+  }
+
+  /* === JOB EXPANDED === */
+  .job-expanded {
+    border-top: 1px solid var(--border);
+    padding: 16px;
+    background: var(--bg);
+    display: none;
+  }
+
+  .job-card.expanded .job-expanded { display: block; }
+
+  .expanded-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .analysis-box {
+    padding: 12px;
+    background: var(--green-dim);
+    border: 1px solid rgba(45,212,160,0.15);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.6;
+    font-family: var(--sans);
+  }
+
+  .analysis-label {
+    font-family: var(--mono);
+    font-size: 7px;
+    color: var(--green);
+    letter-spacing: 0.14em;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .status-selector { margin-bottom: 14px; }
+  .field-label { font-size: 8px; color: var(--text3); letter-spacing: 0.12em; margin-bottom: 6px; text-transform: uppercase; }
+  .status-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .status-pick {
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border: 1px solid;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    transition: all 0.1s;
+  }
+
+  .notes-area {
+    width: 100%;
+    min-height: 56px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text2);
+    padding: 8px 10px;
+    font-size: 10px;
+    font-family: var(--mono);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 12px;
+  }
+
+  .notes-area:focus { border-color: var(--border2); }
+
+  .expanded-actions { display: flex; gap: 8px; align-items: center; }
+
+  .open-btn {
+    padding: 7px 16px;
+    background: var(--amber);
+    color: var(--bg);
+    border: none;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+
+  .open-btn:hover { background: #ffc02a; }
+
+  /* === MODAL === */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    width: 540px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+  }
+
+  .modal-title {
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .modal-sub {
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  .form-field { margin-bottom: 16px; }
+
+  .form-label {
+    display: block;
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    padding: 9px 12px;
+    font-size: 11px;
+    font-family: var(--mono);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--amber); }
+  .form-select { cursor: pointer; }
+  .form-textarea { resize: vertical; min-height: 72px; }
+
+  .form-select option { background: var(--bg2); }
+
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+  .modal-close {
+    position: absolute;
+    display: none;
+  }
+
+  /* === PROFILE PAGE === */
+  .profile-page { padding: 40px 32px; max-width: 700px; }
+
+  .profile-header {
+    margin-bottom: 32px;
+  }
+
+  .profile-title {
+    font-family: var(--sans);
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .profile-sub { font-size: 10px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .profile-section {
+    margin-bottom: 28px;
+    padding: 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .section-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--amber);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .role-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .role-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  .role-option:hover { border-color: var(--border2); color: var(--text); }
+  .role-option.selected { border-color: var(--amber); background: var(--amber-glow); color: var(--amber); }
+
+  .role-checkbox {
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    flex-shrink: 0;
+    color: var(--amber);
+    transition: all 0.15s;
+  }
+
+  .role-option.selected .role-checkbox { border-color: var(--amber); background: var(--amber); color: var(--bg); }
+
+  .websites-section { margin-top: 8px; }
+
+  .website-list { margin-bottom: 12px; }
+
+  .website-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    margin-bottom: 4px;
+    font-size: 10px;
+  }
+
+  .website-info { display: flex; align-items: center; gap: 10px; }
+  .website-name { color: var(--text); font-weight: 700; }
+  .website-url { color: var(--text3); font-size: 9px; }
+
+  .website-remove {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .website-remove:hover { color: var(--red); background: var(--red-dim); }
+
+  .add-website-form {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    gap: 8px;
+    align-items: end;
+  }
+
+  .save-banner {
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: var(--green-dim);
+    border: 1px solid rgba(45,212,160,0.2);
+    border-radius: 3px;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 0.08em;
+    display: none;
+  }
+
+  .save-banner.show { display: block; }
+
+  /* === SOURCES PAGE === */
+  .sources-page { padding: 32px; }
+  .sources-title {
+    font-family: var(--sans);
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .sources-sub { font-size: 9px; color: var(--text3); letter-spacing: 0.1em; margin-bottom: 24px; text-transform: uppercase; }
+
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+
+  .source-card {
+    padding: 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color 0.15s;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .source-card:hover { border-color: var(--border2); }
+
+  .source-info { flex: 1; min-width: 0; }
+  .source-name { font-family: var(--sans); font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+  .source-url { font-size: 9px; color: var(--text3); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .source-desc { font-size: 9px; color: var(--text3); line-height: 1.5; }
+
+  .source-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+
+  .source-link {
+    padding: 5px 10px;
+    background: var(--amber);
+    color: var(--bg);
+    border: none;
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: var(--bg); }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .job-card { animation: fadeIn 0.2s ease; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-mark">JT</div>
+      <div>
+        <div class="logo-text">Job<span>Tracker</span>CZ</div>
+        <div class="logo-sub">IT LEADERSHIP · CZECH REPUBLIC</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" onclick="showPage('jobs')">⬡ LEADS</button>
+      <button class="nav-btn" onclick="showPage('sources')">⬡ SOURCES</button>
+      <button class="nav-btn" onclick="showPage('profile')">⬡ PROFILE</button>
+    </nav>
+  </header>
+
+  <!-- ==================== JOBS PAGE ==================== -->
+  <div id="page-jobs" class="page active">
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="stat" onclick="filterStatus('all')" id="stat-all">
+        <div class="stat-num" id="count-all" style="color:var(--text)">0</div>
+        <div class="stat-label">TOTAL</div>
+      </div>
+      <div class="stat" onclick="filterStatus('new')" id="stat-new">
+        <div class="stat-num" id="count-new" style="color:var(--amber)">0</div>
+        <div class="stat-label">NEW</div>
+      </div>
+      <div class="stat" onclick="filterStatus('watching')" id="stat-watching">
+        <div class="stat-num" id="count-watching" style="color:var(--blue)">0</div>
+        <div class="stat-label">WATCHING</div>
+      </div>
+      <div class="stat" onclick="filterStatus('applied')" id="stat-applied">
+        <div class="stat-num" id="count-applied" style="color:var(--purple)">0</div>
+        <div class="stat-label">APPLIED</div>
+      </div>
+      <div class="stat" onclick="filterStatus('interview')" id="stat-interview">
+        <div class="stat-num" id="count-interview" style="color:var(--green)">0</div>
+        <div class="stat-label">INTERVIEW</div>
+      </div>
+      <div class="stat" onclick="filterStatus('rejected')" id="stat-rejected">
+        <div class="stat-num" id="count-rejected" style="color:var(--text3)">0</div>
+        <div class="stat-label">REJECTED</div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="filter-group">
+        <span class="filter-label">Mode:</span>
+        <button class="filter-btn active" onclick="filterMode('all', this)">ALL</button>
+        <button class="filter-btn" onclick="filterMode('hybrid', this)">HYBRID</button>
+        <button class="filter-btn" onclick="filterMode('on-site', this)">ON-SITE</button>
+        <button class="filter-btn" onclick="filterMode('remote', this)">REMOTE</button>
+      </div>
+      <div class="spacer"></div>
+      <div class="toolbar-right">
+        <span class="count-badge" id="results-count">0 results</span>
+        <button class="btn-secondary" onclick="openAddModal()">+ ADD LEAD</button>
+      </div>
+    </div>
+
+    <!-- Job list -->
+    <div class="job-list" id="job-list">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">⬡</div>
+        <div class="empty-text">No leads yet — add your first job lead</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SOURCES PAGE ==================== -->
+  <div id="page-sources" class="page">
+    <div class="sources-page">
+      <div class="sources-title">Job Sources</div>
+      <div class="sources-sub">Czech Republic & international IT leadership job boards</div>
+
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <button class="btn-primary" onclick="openAddSourceModal()">+ ADD SOURCE</button>
+      </div>
+
+      <div class="sources-grid" id="sources-grid"></div>
+    </div>
+  </div>
+
+  <!-- ==================== PROFILE PAGE ==================== -->
+  <div id="page-profile" class="page">
+    <div class="profile-page">
+      <div class="profile-header">
+        <div class="profile-title">My Profile</div>
+        <div class="profile-sub">Configure your job search preferences</div>
+      </div>
+
+      <!-- Personal info -->
+      <div class="profile-section">
+        <div class="section-title">Personal Information</div>
+        <div class="form-field">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" id="p-name" placeholder="Your name" oninput="markDirty()"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-field">
+            <label class="form-label">Location</label>
+            <input class="form-input" id="p-location" placeholder="e.g. Brno, Czech Republic" oninput="markDirty()"/>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <input class="form-input" id="p-email" placeholder="your@email.com" oninput="markDirty()"/>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-field">
+            <label class="form-label">Years of Experience</label>
+            <input class="form-input" id="p-years" placeholder="e.g. 12" oninput="markDirty()"/>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Target Salary (CZK/month)</label>
+            <input class="form-input" id="p-salary" placeholder="e.g. 130000" oninput="markDirty()"/>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Languages</label>
+          <input class="form-input" id="p-languages" placeholder="e.g. French (native), English (fluent), Czech (basic)" oninput="markDirty()"/>
+        </div>
+      </div>
+
+      <!-- Target roles -->
+      <div class="profile-section">
+        <div class="section-title">Target Roles</div>
+        <div class="role-grid" id="role-grid">
+          <div class="role-option" onclick="toggleRole(this, 'IT Manager')">
+            <div class="role-checkbox">✓</div>IT Manager
+          </div>
+          <div class="role-option" onclick="toggleRole(this, 'IT Director')">
+            <div class="role-checkbox">✓</div>IT Director
+          </div>
+          <div class="role-option" onclick="toggleRole(this, 'Head of IT')">
+            <div class="role-checkbox">✓</div>Head of IT
+          </div>
+          <div class="role-option" onclick="toggleRole(this, 'Head of Infrastructure')">
+            <div class="role-checkbox">✓</div>Head of Infrastructure
+          </div>
+          <div class="role-option" onclick="toggleRole(this, 'IT Architect')">
+            <div class="role-checkbox">✓</div>IT Architect
+          </div>
+          <div class="role-option" onclick="toggleRole(this, 'Cloud Lead')">
+            <div class="role-checkbox">✓</div>Cloud Lead
+          </div>
+          <div class="role-option" onclick="toggleRole(this, 'Platform Lead')">
+            <div class="role-checkbox">✓</div>Platform Lead
+          </div>
+          <div class="role-option" onclick="toggleRole(this, 'CTO')">
+            <div class="role-checkbox">✓</div>CTO
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Work Mode Preference</label>
+          <select class="form-select" id="p-workmode" onchange="markDirty()">
+            <option value="any">Any (hybrid, on-site, remote)</option>
+            <option value="hybrid">Hybrid preferred</option>
+            <option value="remote">Remote preferred</option>
+            <option value="on-site">On-site only</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Key Skills -->
+      <div class="profile-section">
+        <div class="section-title">Key Skills</div>
+        <div class="form-field">
+          <label class="form-label">Technical Skills</label>
+          <textarea class="form-textarea" id="p-skills" placeholder="e.g. Linux (RHEL/Rocky/Ubuntu), Ansible, Chef, Azure, Kubernetes, VMware, Red Hat Satellite, Tanium, Splunk..." oninput="markDirty()"></textarea>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Notable Experience</label>
+          <textarea class="form-textarea" id="p-experience" placeholder="e.g. 12 engineers managed, cost optimization, SOX compliance, carve-out/separation projects..." oninput="markDirty()"></textarea>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="saveProfile()" style="width:100%;">SAVE PROFILE</button>
+      <div class="save-banner" id="save-banner">✓ Profile saved successfully</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ADD LEAD MODAL ==================== -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal scrollbar-thin">
+    <div class="modal-title">Add Job Lead</div>
+    <div class="modal-sub">Enter job details manually</div>
+
+    <div class="form-field">
+      <label class="form-label">Job Title *</label>
+      <input class="form-input" id="f-title" placeholder="e.g. IT Director"/>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Company *</label>
+      <input class="form-input" id="f-company" placeholder="e.g. Deutsche Börse"/>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-field">
+        <label class="form-label">Location</label>
+        <input class="form-input" id="f-location" placeholder="e.g. Praha, Czech Republic"/>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Work Mode</label>
+        <select class="form-select" id="f-mode">
+          <option value="hybrid">Hybrid</option>
+          <option value="on-site">On-site</option>
+          <option value="remote">Remote</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-field">
+        <label class="form-label">Salary</label>
+        <input class="form-input" id="f-salary" placeholder="e.g. 150,000 CZK"/>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Source</label>
+        <select class="form-select" id="f-source">
+          <option>jobs.cz</option>
+          <option>prace.cz</option>
+          <option>profesia.cz</option>
+          <option>linkedin</option>
+          <option>company direct</option>
+          <option>recruiter</option>
+          <option>other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Job URL</label>
+      <input class="form-input" id="f-url" placeholder="https://..."/>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Match Score (0-100)</label>
+      <input class="form-input" id="f-score" type="number" min="0" max="100" placeholder="e.g. 85"/>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Notes / Match Reason</label>
+      <textarea class="form-textarea" id="f-notes" placeholder="Why is this a good fit? Contact name? Recruiter?"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modal-add')">CANCEL</button>
+      <button class="btn-primary" onclick="addJob()">ADD LEAD</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ADD SOURCE MODAL ==================== -->
+<div class="modal-overlay" id="modal-source">
+  <div class="modal">
+    <div class="modal-title">Add Job Source</div>
+    <div class="modal-sub">Add a website to track</div>
+
+    <div class="form-field">
+      <label class="form-label">Site Name *</label>
+      <input class="form-input" id="s-name" placeholder="e.g. My Company Careers"/>
+    </div>
+    <div class="form-field">
+      <label class="form-label">URL *</label>
+      <input class="form-input" id="s-url" placeholder="https://careers.example.com"/>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Description</label>
+      <input class="form-input" id="s-desc" placeholder="e.g. Target company careers page"/>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('modal-source')">CANCEL</button>
+      <button class="btn-primary" onclick="addSource()">ADD SOURCE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const STATUS = {
+  new:       { color: 'var(--amber)',  bg: 'var(--amber-dim)',  label: 'NEW' },
+  watching:  { color: 'var(--blue)',   bg: 'var(--blue-dim)',   label: 'WATCHING' },
+  applied:   { color: 'var(--purple)', bg: 'var(--purple-dim)', label: 'APPLIED' },
+  interview: { color: 'var(--green)',  bg: 'var(--green-dim)',  label: 'INTERVIEW' },
+  rejected:  { color: 'var(--text3)',  bg: 'rgba(68,85,102,0.1)', label: 'REJECTED' },
+};
+
+const DEFAULT_SOURCES = [
+  { id: 's1', name: 'jobs.cz', url: 'https://www.jobs.cz/prace/?q[]=IT+manager&q[]=IT+director', desc: 'Main Czech job board — best for IT management roles' },
+  { id: 's2', name: 'prace.cz', url: 'https://www.prace.cz/nabidky/informatika/', desc: 'Czech job board with IT category' },
+  { id: 's3', name: 'profesia.cz', url: 'https://www.profesia.cz/it-jobs/', desc: 'CZ/SK job board, strong for management roles' },
+  { id: 's4', name: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/search/?keywords=IT+Director&location=Czech+Republic', desc: 'Best for international roles and headhunters' },
+  { id: 's5', name: 'Deutsche Börse Careers', url: 'https://careers.deutsche-boerse.com/information-technology', desc: 'Strong IT infrastructure team in Praha-Karlín' },
+  { id: 's6', name: 'Tech Executives CZ', url: 'https://www.techexecutives.cz', desc: 'CTO/VP network — WhatsApp group, Brno meetups' },
+  { id: 's7', name: 'Thales Careers CZ', url: 'https://careers.thalesgroup.com/global/en/search-results?keywords=&location=Czech+Republic', desc: 'French company, English environment, Praha' },
+  { id: 's8', name: 'indeed.cz', url: 'https://cz.indeed.com/q-IT-manager-jobs.html', desc: 'Aggregator — catches postings from smaller companies' },
+];
+
+const DEFAULT_JOBS = [
+  { id: 'j1', title: 'Senior Infrastructure & Cloud Lead', company: 'Direct Solutions', location: 'Praha-Holešovice, CZ', workMode: 'hybrid', salary: '150–180K CZK', url: 'https://www.prace.cz', source: 'prace.cz', posted: '1 week ago', matchScore: 92, matchReason: 'Exact match: leads team of DevOps + infra engineers, hybrid cloud architecture, FinOps, vendor management. Best technical fit found.', language: 'cs', status: 'new', notes: '', addedAt: new Date().toISOString() },
+  { id: 'j2', title: 'IT Director', company: 'Contact Personal (recruiter)', location: 'Brno, CZ', workMode: 'hybrid', salary: '90K CZK', url: 'https://www.profesia.cz', source: 'profesia.cz', posted: 'Recent', matchScore: 75, matchReason: 'Director-level role in Brno. Company name hidden behind recruiter — call to unblock before applying.', language: 'cs', status: 'watching', notes: 'Call recruiter: +420 724 632 303 to get company name first', addedAt: new Date().toISOString() },
+  { id: 'j3', title: 'IT Manažer | Výrobní firma', company: 'Manpower IT (recruiter)', location: 'Hodonín, CZ', workMode: 'on-site', salary: 'Not disclosed', url: 'https://www.jobs.cz', source: 'jobs.cz', posted: 'Apr 9', matchScore: 70, matchReason: 'Manufacturing company ~60km from Brno. Industrial background from Honeywell is strong differentiator here.', language: 'cs', status: 'new', notes: 'Call Manpower IT Brno to get company name', addedAt: new Date().toISOString() },
+];
+
+let state = {
+  jobs: [],
+  sources: [],
+  profile: {},
+  statusFilter: 'all',
+  modeFilter: 'all',
+};
+
+// ==================== STORAGE ====================
+function save() {
+  localStorage.setItem('jobtrackerz-state', JSON.stringify(state));
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem('jobtrackerz-state');
+    if (raw) {
+      state = JSON.parse(raw);
+    } else {
+      state.jobs = DEFAULT_JOBS;
+      state.sources = DEFAULT_SOURCES;
+      state.profile = {
+        name: 'Fabien',
+        location: 'Brno, Czech Republic',
+        languages: 'French (native), English (fluent), Czech (basic)',
+        salary: '130000',
+        years: '12',
+        skills: 'Linux (RHEL/Rocky/Ubuntu), Red Hat Satellite, Tanium, Ansible, Chef, VMware, Azure (AZ-305), Splunk, Kubernetes, ServiceNow',
+        experience: '12 engineers managed, cost optimization & FinOps, SOX compliance, carve-out/infrastructure separation projects',
+        workmode: 'hybrid',
+        roles: ['IT Manager','IT Director','Head of IT','Head of Infrastructure','IT Architect','Cloud Lead','Platform Lead','CTO'],
+      };
+      save();
+    }
+  } catch(_) {
+    state.jobs = DEFAULT_JOBS;
+    state.sources = DEFAULT_SOURCES;
+  }
+}
+
+// ==================== NAVIGATION ====================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+
+  if (id === 'profile') renderProfile();
+  if (id === 'sources') renderSources();
+  if (id === 'jobs') renderJobs();
+}
+
+// ==================== JOBS ====================
+function getStatusConfig(s) {
+  return STATUS[s] || STATUS.new;
+}
+
+function filteredJobs() {
+  return state.jobs.filter(j => {
+    const statOk = state.statusFilter === 'all' || j.status === state.statusFilter;
+    const modeOk = state.modeFilter === 'all' || j.workMode === state.modeFilter;
+    return statOk && modeOk;
+  });
+}
+
+function renderJobs() {
+  // Update stats
+  const total = state.jobs.length;
+  document.getElementById('count-all').textContent = total;
+  ['new','watching','applied','interview','rejected'].forEach(s => {
+    document.getElementById('count-' + s).textContent = state.jobs.filter(j => j.status === s).length;
+  });
+
+  const jobs = filteredJobs();
+  document.getElementById('results-count').textContent = jobs.length + ' result' + (jobs.length !== 1 ? 's' : '');
+
+  const list = document.getElementById('job-list');
+  const empty = document.getElementById('empty-state');
+
+  if (jobs.length === 0) {
+    empty.style.display = 'block';
+    // Remove all cards
+    list.querySelectorAll('.job-card').forEach(c => c.remove());
+    return;
+  }
+
+  empty.style.display = 'none';
+  list.querySelectorAll('.job-card').forEach(c => c.remove());
+
+  jobs.forEach(job => {
+    const cfg = getStatusConfig(job.status);
+    const scoreColor = job.matchScore >= 80 ? 'var(--green)' : job.matchScore >= 60 ? 'var(--amber)' : 'var(--text3)';
+    const modeClass = 'mode-' + job.workMode.replace(' ','-');
+
+    const card = document.createElement('div');
+    card.className = 'job-card';
+    card.id = 'card-' + job.id;
+    card.innerHTML = `
+      <div class="job-row" onclick="toggleCard('${job.id}')">
+        <div class="job-accent" style="background:${cfg.color}"></div>
+        <div class="job-main">
+          <div class="job-title">${job.title}</div>
+          <div class="job-meta">
+            <span class="job-company">${job.company}</span>
+            <span class="job-dot">·</span>
+            <span>${job.location}</span>
+            <span class="job-dot">·</span>
+            <span class="job-mode ${modeClass}">${job.workMode}</span>
+            ${job.language === 'cs' ? '<span class="lang-badge">CZ</span>' : ''}
+            <span class="job-dot">·</span>
+            <span>${job.source}</span>
+          </div>
+        </div>
+        <div class="job-score">
+          <div class="score-num" style="color:${scoreColor}">${job.matchScore}</div>
+          <div class="score-label">MATCH</div>
+        </div>
+        <div class="job-salary">
+          <div class="salary-num">${job.salary && job.salary !== 'Not disclosed' ? job.salary : '—'}</div>
+          <div class="salary-date">${job.posted || ''}</div>
+        </div>
+        <div class="status-pill" style="color:${cfg.color};background:${cfg.bg};border-color:${cfg.color}40">
+          ${cfg.label}
+        </div>
+      </div>
+      <div class="job-expanded">
+        <div class="expanded-grid">
+          <div class="analysis-box">
+            <span class="analysis-label">AI MATCH ANALYSIS</span>
+            ${job.matchReason || 'No analysis available.'}
+          </div>
+          <div>
+            <div class="status-selector">
+              <div class="field-label">Update Status</div>
+              <div class="status-pills">
+                ${Object.entries(STATUS).map(([key, c]) => `
+                  <button class="status-pick" 
+                    style="color:${job.status===key?c.color:'var(--text3)'};background:${job.status===key?c.bg:'transparent'};border-color:${job.status===key?c.color:'var(--border)'}"
+                    onclick="setStatus('${job.id}','${key}')">
+                    ${c.label}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field-label">Notes</div>
+        <textarea class="notes-area" placeholder="Contacts, salary discussed, recruiter name, next steps..." 
+          onchange="setNotes('${job.id}', this.value)">${job.notes || ''}</textarea>
+        <div class="expanded-actions">
+          <a href="${job.url || '#'}" target="_blank" class="open-btn">OPEN JOB →</a>
+          <button class="btn-danger" onclick="deleteJob('${job.id}')">DISCARD</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function toggleCard(id) {
+  const card = document.getElementById('card-' + id);
+  card.classList.toggle('expanded');
+}
+
+function filterStatus(status) {
+  state.statusFilter = status;
+  document.querySelectorAll('.stat').forEach(s => s.classList.remove('active'));
+  document.getElementById('stat-' + status).classList.add('active');
+  renderJobs();
+}
+
+function filterMode(mode, btn) {
+  state.modeFilter = mode;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderJobs();
+}
+
+function setStatus(id, status) {
+  const job = state.jobs.find(j => j.id === id);
+  if (job) { job.status = status; save(); renderJobs(); }
+}
+
+function setNotes(id, notes) {
+  const job = state.jobs.find(j => j.id === id);
+  if (job) { job.notes = notes; save(); }
+}
+
+function deleteJob(id) {
+  state.jobs = state.jobs.filter(j => j.id !== id);
+  save();
+  renderJobs();
+}
+
+function openAddModal() {
+  ['f-title','f-company','f-location','f-url','f-salary','f-notes'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f-score').value = '75';
+  document.getElementById('modal-add').classList.add('open');
+}
+
+function addJob() {
+  const title = document.getElementById('f-title').value.trim();
+  const company = document.getElementById('f-company').value.trim();
+  if (!title || !company) { alert('Title and Company are required.'); return; }
+
+  const job = {
+    id: 'j-' + Date.now(),
+    title,
+    company,
+    location: document.getElementById('f-location').value.trim() || 'Czech Republic',
+    workMode: document.getElementById('f-mode').value,
+    salary: document.getElementById('f-salary').value.trim() || 'Not disclosed',
+    url: document.getElementById('f-url').value.trim() || '#',
+    source: document.getElementById('f-source').value,
+    posted: 'Today',
+    matchScore: parseInt(document.getElementById('f-score').value) || 75,
+    matchReason: document.getElementById('f-notes').value.trim(),
+    language: 'en',
+    status: 'new',
+    notes: '',
+    addedAt: new Date().toISOString(),
+  };
+
+  state.jobs.unshift(job);
+  save();
+  closeModal('modal-add');
+  renderJobs();
+}
+
+// ==================== SOURCES ====================
+function renderSources() {
+  const grid = document.getElementById('sources-grid');
+  grid.innerHTML = '';
+
+  state.sources.forEach(src => {
+    const card = document.createElement('div');
+    card.className = 'source-card';
+    card.innerHTML = `
+      <div class="source-info">
+        <div class="source-name">${src.name}</div>
+        <div class="source-url">${src.url}</div>
+        <div class="source-desc">${src.desc || ''}</div>
+      </div>
+      <div class="source-actions">
+        <a href="${src.url}" target="_blank" class="source-link">OPEN →</a>
+        <button class="btn-danger" onclick="removeSource('${src.id}')">✕</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function openAddSourceModal() {
+  ['s-name','s-url','s-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('modal-source').classList.add('open');
+}
+
+function addSource() {
+  const name = document.getElementById('s-name').value.trim();
+  const url = document.getElementById('s-url').value.trim();
+  if (!name || !url) { alert('Name and URL are required.'); return; }
+
+  state.sources.push({
+    id: 's-' + Date.now(),
+    name,
+    url,
+    desc: document.getElementById('s-desc').value.trim(),
+  });
+  save();
+  closeModal('modal-source');
+  renderSources();
+}
+
+function removeSource(id) {
+  state.sources = state.sources.filter(s => s.id !== id);
+  save();
+  renderSources();
+}
+
+// ==================== PROFILE ====================
+function renderProfile() {
+  const p = state.profile || {};
+  const fields = ['name','location','email','years','salary','languages','skills','experience','workmode'];
+  fields.forEach(f => {
+    const el = document.getElementById('p-' + f);
+    if (el && p[f]) el.value = p[f];
+  });
+
+  // Roles
+  const roles = p.roles || [];
+  document.querySelectorAll('.role-option').forEach(opt => {
+    const roleName = opt.textContent.trim();
+    if (roles.includes(roleName)) opt.classList.add('selected');
+    else opt.classList.remove('selected');
+  });
+}
+
+function toggleRole(el, roleName) {
+  el.classList.toggle('selected');
+  markDirty();
+}
+
+function markDirty() {
+  // Just track that changes have been made
+}
+
+function saveProfile() {
+  const roles = [];
+  document.querySelectorAll('.role-option.selected').forEach(opt => {
+    roles.push(opt.textContent.trim());
+  });
+
+  state.profile = {
+    name: document.getElementById('p-name').value,
+    location: document.getElementById('p-location').value,
+    email: document.getElementById('p-email').value,
+    years: document.getElementById('p-years').value,
+    salary: document.getElementById('p-salary').value,
+    languages: document.getElementById('p-languages').value,
+    skills: document.getElementById('p-skills').value,
+    experience: document.getElementById('p-experience').value,
+    workmode: document.getElementById('p-workmode').value,
+    roles,
+  };
+
+  save();
+
+  const banner = document.getElementById('save-banner');
+  banner.classList.add('show');
+  setTimeout(() => banner.classList.remove('show'), 3000);
+}
+
+// ==================== MODAL ====================
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// ==================== INIT ====================
+load();
+renderJobs();
+document.getElementById('stat-all').classList.add('active');
+</script>
+</body>
+</html>
