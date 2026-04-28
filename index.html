@@ -946,7 +946,7 @@
       </div>
       <div class="spacer"></div>
       <div class="toolbar-right">
-        <span class="count-badge" id="results-count">0 results</span>
+        <span class="count-badge" id="last-scan-time" style="color:var(--text3);margin-right:8px;"></span><span class="count-badge" id="results-count">0 results</span>
         <button class="btn-secondary" onclick="openAddModal()">+ ADD LEAD</button>
         <button class="btn-primary" onclick="searchNow()">⬡ SEARCH NOW</button>
       </div>
@@ -1208,12 +1208,12 @@ let state = {
 
 // ==================== STORAGE ====================
 function save() {
-  localStorage.setItem('jobtrackerz-state-v7', JSON.stringify(state));
+  localStorage.setItem('jobtrackerz-state-v8', JSON.stringify(state));
 }
 
 function load() {
   try {
-    const raw = localStorage.getItem('jobtrackerz-state-v7');
+    const raw = localStorage.getItem('jobtrackerz-state-v8');
     if (raw) {
       state = JSON.parse(raw);
     } else {
@@ -1609,6 +1609,7 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 load();
 renderJobs();
 document.getElementById('stat-all').classList.add('active');
+loadFromScan(); // Fetch latest scan results from jobs.json
 </script>
 
   <footer>

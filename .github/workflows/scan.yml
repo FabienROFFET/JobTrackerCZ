@@ -1,0 +1,32 @@
+name: Daily Job Scan
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Every day at 6:00 AM UTC (8:00 AM Brno time)
+  workflow_dispatch:       # Manual trigger from GitHub Actions tab
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run RSS scan
+        run: python scan.py
+
+      - name: Commit and push jobs.json
+        run: |
+          git config user.name "JobTrackerCZ Bot"
+          git config user.email "bot@jobtrackerz.cz"
+          git add jobs.json
+          git diff --staged --quiet || git commit -m "chore: daily scan $(date +'%Y-%m-%d') - $( python3 -c "import json; d=json.load(open('jobs.json')); print(str(d.get('newThisScan',0))+' new leads')")"
+          git push
