@@ -745,6 +745,144 @@
 
   @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   .job-card { animation: fadeIn 0.2s ease; }
+
+  /* ===================== FOOTER ===================== */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg2);
+    margin-top: auto;
+  }
+  .footer-copy {
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+  }
+  .footer-copy span { color: var(--amber); }
+  .footer-ver {
+    font-size: 8px;
+    color: var(--border2);
+    letter-spacing: 0.1em;
+  }
+
+  /* ===================== LARGE SCREEN ===================== */
+  @media (min-width: 1400px) {
+    .job-list { max-width: 100%; padding: 20px 48px; }
+    .toolbar { padding: 12px 48px; }
+    header { padding: 0 48px; }
+    .profile-page { max-width: 1000px; padding: 48px 48px; }
+    .sources-page { padding: 40px 48px; }
+    .sources-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+    .role-grid { grid-template-columns: repeat(4, 1fr); }
+    .job-row { padding: 16px 24px; gap: 20px; }
+    .job-title { font-size: 14px; }
+    .job-meta { font-size: 11px; }
+    .stat-num { font-size: 28px; }
+    .stat { padding: 16px 8px; }
+    footer { padding: 14px 48px; }
+    .stats-bar { grid-template-columns: repeat(6, 1fr); }
+    .expanded-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+  }
+
+  @media (min-width: 1800px) {
+    .job-list { max-width: 100%; padding: 24px 80px; }
+    .toolbar { padding: 14px 80px; }
+    header { padding: 0 80px; height: 68px; }
+    .logo-text { font-size: 20px; }
+    .sources-page { padding: 40px 80px; }
+    .sources-grid { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
+    .role-grid { grid-template-columns: repeat(5, 1fr); }
+    footer { padding: 16px 80px; }
+    .stat-num { font-size: 32px; }
+    .job-row { padding: 18px 28px; }
+    .job-title { font-size: 15px; }
+    .modal { width: 640px; }
+  }
+
+  @media (min-width: 2400px) {
+    .job-list { padding: 28px 120px; }
+    .toolbar { padding: 14px 120px; }
+    header { padding: 0 120px; height: 72px; }
+    .sources-page { padding: 48px 120px; }
+    footer { padding: 18px 120px; }
+    .sources-grid { grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); }
+    .role-grid { grid-template-columns: repeat(5, 1fr); }
+  }
+
+  /* ===================== TABLET ===================== */
+  @media (max-width: 900px) {
+    header { padding: 0 16px; }
+    .logo-sub { display: none; }
+    .nav-btn { padding: 5px 10px; font-size: 9px; }
+    .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    .stat:nth-child(4),
+    .stat:nth-child(5),
+    .stat:nth-child(6) { border-top: 1px solid var(--border); }
+    .toolbar { padding: 10px 16px; flex-wrap: wrap; gap: 6px; }
+    .job-list { padding: 12px 16px; }
+    .job-row { grid-template-columns: 10px 1fr auto auto; gap: 10px; }
+    .job-score { display: none; }
+    .job-salary { display: none; }
+    .profile-page { padding: 24px 16px; }
+    .sources-page { padding: 20px 16px; }
+    .sources-grid { grid-template-columns: 1fr; }
+    .role-grid { grid-template-columns: 1fr; }
+    .expanded-grid { grid-template-columns: 1fr; }
+    footer { padding: 12px 16px; flex-direction: column; gap: 6px; text-align: center; }
+  }
+
+  /* ===================== MOBILE ===================== */
+  @media (max-width: 600px) {
+    header { height: auto; padding: 12px 14px; flex-wrap: wrap; gap: 10px; }
+    .logo-text { font-size: 16px; }
+    .logo-mark { width: 28px; height: 28px; font-size: 12px; }
+    .nav { width: 100%; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 8px; }
+    .nav-btn { flex: 1; text-align: center; padding: 8px 4px; font-size: 9px; min-height: 36px; }
+    .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    .stat { padding: 12px 4px; cursor: pointer; min-height: 56px; }
+    .stat:nth-child(4), .stat:nth-child(5), .stat:nth-child(6) { border-top: 1px solid var(--border); }
+    .stat-num { font-size: 20px; }
+    .stat-label { font-size: 7px; }
+    .toolbar { padding: 8px 14px; gap: 6px; }
+    .filter-label { display: none; }
+    .filter-btn { padding: 5px 9px; font-size: 8px; min-height: 30px; }
+    .btn-primary { padding: 8px 12px; font-size: 9px; min-height: 36px; }
+    .btn-secondary { padding: 7px 10px; font-size: 9px; min-height: 36px; }
+    .count-badge { display: none; }
+    .job-list { padding: 8px 12px; }
+    .job-row { grid-template-columns: 4px 1fr auto; gap: 10px; padding: 12px 12px; }
+    .job-score { display: none; }
+    .job-salary { display: none; }
+    .status-pill { font-size: 7px; min-width: 56px; padding: 3px 6px; }
+    .job-title { font-size: 12px; }
+    .job-meta { font-size: 9px; gap: 5px; }
+    .job-accent { width: 4px; height: 36px; }
+    .job-expanded { padding: 12px; }
+    .expanded-grid { grid-template-columns: 1fr; gap: 10px; }
+    .status-pills { gap: 4px; }
+    .status-pick { padding: 5px 8px; font-size: 8px; min-height: 30px; }
+    .open-btn { padding: 8px 14px; font-size: 9px; min-height: 36px; }
+    .btn-danger { min-height: 36px; padding: 5px 12px; }
+    .modal { padding: 18px; max-height: 95vh; }
+    .modal-title { font-size: 16px; }
+    .modal-actions { gap: 8px; }
+    .profile-page { padding: 16px 14px; }
+    .profile-section { padding: 14px; }
+    .profile-title { font-size: 20px; }
+    .role-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .role-option { padding: 8px 10px; font-size: 10px; min-height: 44px; }
+    .sources-page { padding: 16px 14px; }
+    .sources-grid { grid-template-columns: 1fr; gap: 8px; }
+    .source-card { padding: 12px; flex-direction: column; gap: 10px; }
+    .source-actions { flex-direction: row; }
+    .source-link { min-height: 32px; display: flex; align-items: center; justify-content: center; }
+    footer { padding: 10px 12px; font-size: 8px; }
+    .add-website-form { grid-template-columns: 1fr; }
+    .count-badge { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -810,6 +948,7 @@
       <div class="toolbar-right">
         <span class="count-badge" id="results-count">0 results</span>
         <button class="btn-secondary" onclick="openAddModal()">+ ADD LEAD</button>
+        <button class="btn-primary" onclick="searchNow()">⬡ SEARCH NOW</button>
       </div>
     </div>
 
@@ -844,66 +983,41 @@
         <div class="profile-sub">Configure your job search preferences</div>
       </div>
 
-      <!-- Personal info -->
-      <div class="profile-section">
-        <div class="section-title">Personal Information</div>
-        <div class="form-field">
-          <label class="form-label">Full Name</label>
-          <input class="form-input" id="p-name" placeholder="Your name" oninput="markDirty()"/>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="form-field">
-            <label class="form-label">Location</label>
-            <input class="form-input" id="p-location" placeholder="e.g. Brno, Czech Republic" oninput="markDirty()"/>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Email</label>
-            <input class="form-input" id="p-email" placeholder="your@email.com" oninput="markDirty()"/>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="form-field">
-            <label class="form-label">Years of Experience</label>
-            <input class="form-input" id="p-years" placeholder="e.g. 12" oninput="markDirty()"/>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Target Salary (CZK/month)</label>
-            <input class="form-input" id="p-salary" placeholder="e.g. 130000" oninput="markDirty()"/>
-          </div>
-        </div>
-        <div class="form-field">
-          <label class="form-label">Languages</label>
-          <input class="form-input" id="p-languages" placeholder="e.g. French (native), English (fluent), Czech (basic)" oninput="markDirty()"/>
-        </div>
-      </div>
+
 
       <!-- Target roles -->
       <div class="profile-section">
         <div class="section-title">Target Roles</div>
         <div class="role-grid" id="role-grid">
-          <div class="role-option" onclick="toggleRole(this, 'IT Manager')">
-            <div class="role-checkbox">✓</div>IT Manager
+          <div class="role-option" data-role="IT Manager" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>IT Manager</div><div style="font-size:9px;opacity:0.6;margin-top:2px">IT manažer</div></div>
           </div>
-          <div class="role-option" onclick="toggleRole(this, 'IT Director')">
-            <div class="role-checkbox">✓</div>IT Director
+          <div class="role-option" data-role="IT Director" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>IT Director</div><div style="font-size:9px;opacity:0.6;margin-top:2px">IT ředitel</div></div>
           </div>
-          <div class="role-option" onclick="toggleRole(this, 'Head of IT')">
-            <div class="role-checkbox">✓</div>Head of IT
+          <div class="role-option" data-role="Head of IT" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>Head of IT</div><div style="font-size:9px;opacity:0.6;margin-top:2px">Vedoucí IT</div></div>
           </div>
-          <div class="role-option" onclick="toggleRole(this, 'Head of Infrastructure')">
-            <div class="role-checkbox">✓</div>Head of Infrastructure
+          <div class="role-option" data-role="Head of Infrastructure" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>Head of Infrastructure</div><div style="font-size:9px;opacity:0.6;margin-top:2px">Vedoucí infrastruktury</div></div>
           </div>
-          <div class="role-option" onclick="toggleRole(this, 'IT Architect')">
-            <div class="role-checkbox">✓</div>IT Architect
+          <div class="role-option" data-role="IT Architect" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>IT Architect</div><div style="font-size:9px;opacity:0.6;margin-top:2px">IT architekt</div></div>
           </div>
-          <div class="role-option" onclick="toggleRole(this, 'Cloud Lead')">
-            <div class="role-checkbox">✓</div>Cloud Lead
+          <div class="role-option" data-role="Cloud Lead" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>Cloud Lead</div><div style="font-size:9px;opacity:0.6;margin-top:2px">Vedoucí cloudu</div></div>
           </div>
-          <div class="role-option" onclick="toggleRole(this, 'Platform Lead')">
-            <div class="role-checkbox">✓</div>Platform Lead
+          <div class="role-option" data-role="Platform Lead" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>Platform Lead</div><div style="font-size:9px;opacity:0.6;margin-top:2px">Vedoucí platformy</div></div>
           </div>
-          <div class="role-option" onclick="toggleRole(this, 'CTO')">
-            <div class="role-checkbox">✓</div>CTO
+          <div class="role-option" data-role="CTO" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>CTO</div><div style="font-size:9px;opacity:0.6;margin-top:2px">Technický ředitel</div></div>
+          </div>
+          <div class="role-option" data-role="VP IT" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>VP IT</div><div style="font-size:9px;opacity:0.6;margin-top:2px">Viceprezident IT</div></div>
+          </div>
+          <div class="role-option" data-role="Infrastructure Lead" onclick="toggleRole(this)">
+            <div class="role-checkbox">✓</div><div><div>Infrastructure Lead</div><div style="font-size:9px;opacity:0.6;margin-top:2px">Vedoucí infrastruktury</div></div>
           </div>
         </div>
         <div class="form-field">
@@ -919,15 +1033,18 @@
 
       <!-- Key Skills -->
       <div class="profile-section">
-        <div class="section-title">Key Skills</div>
+        <div class="section-title">Keywords &amp; Skills</div>
         <div class="form-field">
-          <label class="form-label">Technical Skills</label>
-          <textarea class="form-textarea" id="p-skills" placeholder="e.g. Linux (RHEL/Rocky/Ubuntu), Ansible, Chef, Azure, Kubernetes, VMware, Red Hat Satellite, Tanium, Splunk..." oninput="markDirty()"></textarea>
+          <label class="form-label">Keywords — used for lead matching</label>
+          <div style="font-size:9px;color:var(--text3);margin-bottom:8px;line-height:1.5;">Click to remove · Type below to add · Used to auto-score job leads</div>
+          <div id="keyword-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;min-height:32px;padding:8px;background:var(--bg);border:1px solid var(--border2);border-radius:3px;"></div>
+          <div style="display:flex;gap:8px;">
+            <input class="form-input" id="keyword-input" placeholder="Add keyword e.g. Linux, VMware, CI/CD..." style="flex:1;"
+              onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();addKeyword();}"/>
+            <button class="btn-secondary" onclick="addKeyword()" style="white-space:nowrap;">+ ADD</button>
+          </div>
         </div>
-        <div class="form-field">
-          <label class="form-label">Notable Experience</label>
-          <textarea class="form-textarea" id="p-experience" placeholder="e.g. 12 engineers managed, cost optimization, SOX compliance, carve-out/separation projects..." oninput="markDirty()"></textarea>
-        </div>
+
       </div>
 
       <button class="btn-primary" onclick="saveProfile()" style="width:100%;">SAVE PROFILE</button>
@@ -1039,20 +1156,46 @@ const STATUS = {
 };
 
 const DEFAULT_SOURCES = [
-  { id: 's1', name: 'jobs.cz', url: 'https://www.jobs.cz/prace/?q[]=IT+manager&q[]=IT+director', desc: 'Main Czech job board — best for IT management roles' },
-  { id: 's2', name: 'prace.cz', url: 'https://www.prace.cz/nabidky/informatika/', desc: 'Czech job board with IT category' },
-  { id: 's3', name: 'profesia.cz', url: 'https://www.profesia.cz/it-jobs/', desc: 'CZ/SK job board, strong for management roles' },
-  { id: 's4', name: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/search/?keywords=IT+Director&location=Czech+Republic', desc: 'Best for international roles and headhunters' },
-  { id: 's5', name: 'Deutsche Börse Careers', url: 'https://careers.deutsche-boerse.com/information-technology', desc: 'Strong IT infrastructure team in Praha-Karlín' },
-  { id: 's6', name: 'Tech Executives CZ', url: 'https://www.techexecutives.cz', desc: 'CTO/VP network — WhatsApp group, Brno meetups' },
-  { id: 's7', name: 'Thales Careers CZ', url: 'https://careers.thalesgroup.com/global/en/search-results?keywords=&location=Czech+Republic', desc: 'French company, English environment, Praha' },
-  { id: 's8', name: 'indeed.cz', url: 'https://cz.indeed.com/q-IT-manager-jobs.html', desc: 'Aggregator — catches postings from smaller companies' },
+  // === JOB BOARDS ===
+  { id: 's1',  name: 'jobs.cz', url: 'https://www.jobs.cz/prace/?q[]=IT+manager&q[]=IT+director', desc: 'Main Czech job board — best for IT management roles' },
+  { id: 's2',  name: 'prace.cz', url: 'https://www.prace.cz/nabidky/informatika/', desc: 'Czech job board with IT category' },
+  { id: 's3',  name: 'profesia.cz', url: 'https://www.profesia.cz/it-jobs/', desc: 'CZ/SK job board, strong for management roles' },
+  { id: 's4',  name: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/search/?keywords=IT+Director&location=Czech+Republic', desc: 'Best for international roles and headhunters' },
+  { id: 's5',  name: 'Deutsche Börse Careers', url: 'https://careers.deutsche-boerse.com/information-technology', desc: 'Strong IT infrastructure team in Praha-Karlín' },
+  { id: 's6',  name: 'Tech Executives CZ', url: 'https://www.techexecutives.cz', desc: 'CTO/VP network — WhatsApp group, Brno meetups' },
+  { id: 's7',  name: 'Thales Careers CZ', url: 'https://careers.thalesgroup.com/global/en/search-results?keywords=&location=Czech+Republic', desc: 'French company, English environment, Praha' },
+  { id: 's8',  name: 'indeed.cz', url: 'https://cz.indeed.com/q-IT-manager-jobs.html', desc: 'Aggregator — catches postings from smaller companies' },
+  // === DEFENSE & AEROSPACE — BRNO REGION ===
+  { id: 's9',  name: 'Vojenský výzkumný ústav (VVÚ)', url: 'https://www.vvu.cz/kariera', desc: 'State-owned defense R&D; electronic warfare, radar signal detection, deception/jamming, CBRN protection' },
+  { id: 's10', name: 'Honeywell Aerospace', url: 'https://honeywell.jobs.cz/en/homepage', desc: 'Aerospace/defense R&D; avionics, surveillance sensors, radar components, engines, NATO/EU defense projects' },
+  { id: 's11', name: 'Brno Defence Group (BDG)', url: 'https://brnodg.com/career', desc: 'Defense equipment, military material, small arms, ballistic protection' },
+  { id: 's12', name: 'UNIS a.s. (DAAC Division)', url: 'https://www.unis.cz/en/career', desc: 'Electronic control systems for aviation/defense; radar/electronic integration for avionics' },
+  { id: 's13', name: 'Frentech Aerospace', url: 'https://frentech.cz/en/career', desc: 'Precision aerospace components, ESA/NATO supply chain, defense mechanisms' },
+  { id: 's14', name: 'SAB Aerospace', url: 'https://www.sabaerospace.cz/career', desc: 'Space systems, satellite structures, ESA projects, defense crossover' },
+  { id: 's15', name: 'G.L. Electronic', url: 'https://www.glelectronic.space/career', desc: 'Aerospace electronics, flight equipment, testing, embedded/hardware-software integration' },
+  { id: 's16', name: 'World from Space', url: 'https://www.worldfromspace.cz/career', desc: 'Satellite data, Earth observation, geospatial analytics, defense applications' },
+  { id: 's17', name: 'OHB Czechspace', url: 'https://www.ohb.de/en/career', desc: 'Satellite systems, space missions, defense/military crossover' },
+  { id: 's18', name: 'TESCAN', url: 'https://www.tescan.com/careers', desc: 'Electron microscopes, imaging systems, high-precision detection technologies' },
+  { id: 's19', name: 'PBS Velká Bíteš', url: 'https://www.pbs.cz/en/career', desc: 'Turbine engines, APUs, aerospace components for aviation/defense' },
+  { id: 's20', name: 'onsemi (ON Semiconductor)', url: 'https://www.onsemi.com/company/careers', desc: 'Semiconductors for automotive, aerospace, defense; embedded and Linux systems' },
+  { id: 's21', name: 'FIDES', url: 'https://www.fides.cz/kariera', desc: 'Integrated security systems, defense-grade infrastructure, cybersecurity, embedded systems' },
+  { id: 's22', name: 'Kubíček Balloons', url: 'https://www.kubicekballoons.eu/en/career', desc: 'Aeronautical manufacturing — balloons, airships' },
+  { id: 's23', name: 'Brno Space Cluster', url: 'https://www.brnoregion.com/space', desc: 'Space ecosystem, ESA supply chain, aerospace companies network' },
+  { id: 's24', name: 'LISI Aerospace', url: 'https://www.lisi-aerospace.com/careers', desc: 'Aerospace fasteners, engine components' },
+  { id: 's25', name: 'Delong Instruments', url: 'https://www.delong.cz/career', desc: 'Electron optics, vacuum systems, scientific instruments' },
+  { id: 's26', name: 'ZEBRA Technologies', url: 'https://www.zebra.com/us/en/about-zebra/company-information/careers.html', desc: 'Industrial ruggedized devices, logistics hardware' },
+  { id: 's27', name: 'ERA a.s.', url: 'https://kariera.era.aero', desc: 'Passive radar, multilateration, airspace surveillance' },
+  { id: 's28', name: 'Retia (RETIA a.s.)', url: 'https://www.retia.cz/en/career', desc: 'Military radars, ReGUARD 3D radar, command & control systems' },
+  { id: 's29', name: 'ELDIS Pardubice', url: 'https://www.eldis.cz/en/career', desc: 'ATC radars, primary/secondary surveillance radars' },
+  { id: 's30', name: 'NRTS CZ', url: 'https://www.nrtscz.cz/en/career', desc: 'Surveillance radar, air traffic systems, radar software' },
+  { id: 's31', name: 'Vojenský technický ústav (VTÚ)', url: 'https://www.vtusp.cz/kariera', desc: 'Military electronics, radar components, defense systems' },
+  { id: 's32', name: 'Brno University of Technology (VUT)', url: 'https://www.vut.cz/en/people/jobs', desc: 'Aerospace research, UAVs, radar research, signal processing' },
 ];
 
 const DEFAULT_JOBS = [
-  { id: 'j1', title: 'Senior Infrastructure & Cloud Lead', company: 'Direct Solutions', location: 'Praha-Holešovice, CZ', workMode: 'hybrid', salary: '150–180K CZK', url: 'https://www.prace.cz', source: 'prace.cz', posted: '1 week ago', matchScore: 92, matchReason: 'Exact match: leads team of DevOps + infra engineers, hybrid cloud architecture, FinOps, vendor management. Best technical fit found.', language: 'cs', status: 'new', notes: '', addedAt: new Date().toISOString() },
-  { id: 'j2', title: 'IT Director', company: 'Contact Personal (recruiter)', location: 'Brno, CZ', workMode: 'hybrid', salary: '90K CZK', url: 'https://www.profesia.cz', source: 'profesia.cz', posted: 'Recent', matchScore: 75, matchReason: 'Director-level role in Brno. Company name hidden behind recruiter — call to unblock before applying.', language: 'cs', status: 'watching', notes: 'Call recruiter: +420 724 632 303 to get company name first', addedAt: new Date().toISOString() },
-  { id: 'j3', title: 'IT Manažer | Výrobní firma', company: 'Manpower IT (recruiter)', location: 'Hodonín, CZ', workMode: 'on-site', salary: 'Not disclosed', url: 'https://www.jobs.cz', source: 'jobs.cz', posted: 'Apr 9', matchScore: 70, matchReason: 'Manufacturing company ~60km from Brno. Industrial background from Honeywell is strong differentiator here.', language: 'cs', status: 'new', notes: 'Call Manpower IT Brno to get company name', addedAt: new Date().toISOString() },
+  { id: 'j1', title: 'Senior Infrastructure & Cloud Lead', company: 'Direct Solutions', location: 'Praha-Holešovice, CZ', workMode: 'hybrid', salary: '150–180K CZK', url: 'https://www.prace.cz/nabidka/52b2f237-6763-4914-934c-7cfe4196078e/', source: 'prace.cz', posted: 'Apr 2026', matchScore: 92, matchReason: 'Exact match: leads team of DevOps + infra engineers, hybrid cloud architecture, FinOps, vendor management. Best technical fit found today.', language: 'cs', status: 'new', notes: '', addedAt: new Date().toISOString() },
+  { id: 'j2', title: 'IT Director', company: 'Contact Personal (recruiter)', location: 'Brno, CZ', workMode: 'hybrid', salary: '90K CZK', url: 'https://www.profesia.cz', source: 'profesia.cz', posted: 'Apr 2026', matchScore: 75, matchReason: 'Director-level role in Brno. Company hidden behind recruiter — call to get company name before applying.', language: 'cs', status: 'watching', notes: 'Call recruiter: +420 724 632 303 to get company name first', addedAt: new Date().toISOString() },
+  { id: 'j3', title: 'IT Manažer | Výrobní firma', company: 'Manpower IT (recruiter)', location: 'Hodonín, CZ', workMode: 'on-site', salary: 'Not disclosed', url: 'https://www.jobs.cz', source: 'jobs.cz', posted: 'Apr 9 2026', matchScore: 70, matchReason: 'Manufacturing company ~60km from Brno. Industrial background from Honeywell is strong differentiator here.', language: 'cs', status: 'new', notes: 'Call Manpower IT Brno to get company name', addedAt: new Date().toISOString() },
 ];
 
 let state = {
@@ -1065,25 +1208,25 @@ let state = {
 
 // ==================== STORAGE ====================
 function save() {
-  localStorage.setItem('jobtrackerz-state', JSON.stringify(state));
+  localStorage.setItem('jobtrackerz-state-v7', JSON.stringify(state));
 }
 
 function load() {
   try {
-    const raw = localStorage.getItem('jobtrackerz-state');
+    const raw = localStorage.getItem('jobtrackerz-state-v7');
     if (raw) {
       state = JSON.parse(raw);
     } else {
       state.jobs = DEFAULT_JOBS;
       state.sources = DEFAULT_SOURCES;
       state.profile = {
-        name: 'Fabien',
-        location: 'Brno, Czech Republic',
-        languages: 'French (native), English (fluent), Czech (basic)',
-        salary: '130000',
-        years: '12',
-        skills: 'Linux (RHEL/Rocky/Ubuntu), Red Hat Satellite, Tanium, Ansible, Chef, VMware, Azure (AZ-305), Splunk, Kubernetes, ServiceNow',
-        experience: '12 engineers managed, cost optimization & FinOps, SOX compliance, carve-out/infrastructure separation projects',
+        name: '',
+        location: '',
+        languages: '',
+        salary: '',
+        years: '',
+        keywords: ['Linux','RHEL','VMware','Ansible','Chef','Azure','Kubernetes','CI/CD','Red Hat Satellite','Tanium','Splunk','ServiceNow','Open Source','FinOps','Cost optimization','Team management','Infrastructure','Hybrid cloud','Automation','SELinux','PAM'],
+        experience: '12 engineers managed (Linux team), Sr IT Supervisor / SME Linux at Honeywell Brno, cost optimization & FinOps, SOX compliance & audit, infrastructure carve-out & separation projects, SailPoint IdentityIQ JBoss to WildFly migration, Linux server migrations (VMware/LDAP/AD/Satellite/Chef/MDE), Dynamics 365 / Dataverse data export',
         workmode: 'hybrid',
         roles: ['IT Manager','IT Director','Head of IT','Head of Infrastructure','IT Architect','Cloud Lead','Platform Lead','CTO'],
       };
@@ -1249,6 +1392,35 @@ function deleteJob(id) {
   renderJobs();
 }
 
+
+function searchNow() {
+  const urls = [
+    "https://www.jobs.cz/prace/?q%5B%5D=IT+manager&q%5B%5D=IT+director&q%5B%5D=head+of+IT&q%5B%5D=IT+architect",
+    "https://www.prace.cz/nabidky/it-reditel-manazer/",
+    "https://www.profesia.cz/praca/informatika/manazer-riaditel/",
+    "https://www.linkedin.com/jobs/search/?keywords=IT+Director+OR+Head+of+IT+OR+IT+Manager+OR+IT+Architect&location=Czech+Republic&f_TPR=r604800",
+    "https://cz.indeed.com/jobs?q=IT+Manager+OR+IT+Director+OR+Head+of+IT&l=Czech+Republic",
+  ];
+  const opened = [];
+  urls.forEach((url, i) => {
+    setTimeout(() => { window.open(url, "_blank"); }, i * 300);
+    opened.push(url);
+  });
+  showSearchToast(urls.length);
+}
+
+function showSearchToast(count) {
+  let toast = document.getElementById("search-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "search-toast";
+    toast.style.cssText = "position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--amber);border-radius:4px;padding:12px 18px;font-size:10px;color:var(--amber);letter-spacing:0.1em;z-index:999;font-family:var(--mono);box-shadow:0 4px 24px rgba(0,0,0,0.4);";
+    document.body.appendChild(toast);
+  }
+  toast.textContent = "⬡ OPENED " + count + " JOB BOARDS";
+  toast.style.display = "block";
+  setTimeout(() => { toast.style.display = "none"; }, 4000);
+}
 function openAddModal() {
   ['f-title','f-company','f-location','f-url','f-salary','f-notes'].forEach(id => {
     document.getElementById(id).value = '';
@@ -1337,47 +1509,79 @@ function removeSource(id) {
 }
 
 // ==================== PROFILE ====================
+// ==================== KEYWORDS ====================
+const DEFAULT_KEYWORDS = [
+  'Linux','RHEL','VMware','Ansible','Chef','Azure','Kubernetes',
+  'CI/CD','Red Hat Satellite','Tanium','Splunk','ServiceNow',
+  'Open Source','FinOps','Cost optimization','Team management',
+  'Infrastructure','Hybrid cloud','Automation','SELinux','PAM',
+];
+
+let currentKeywords = [];
+
+function renderKeywordChips() {
+  const container = document.getElementById('keyword-chips');
+  if (!container) return;
+  container.innerHTML = '';
+  currentKeywords.forEach((kw, i) => {
+    const chip = document.createElement('span');
+    chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:var(--amber-dim);border:1px solid var(--amber);border-radius:20px;font-size:9px;color:var(--amber);letter-spacing:0.06em;cursor:default;';
+    chip.innerHTML = kw + '<span onclick="removeKeyword(' + i + ')" style="cursor:pointer;opacity:0.6;font-size:11px;line-height:1;">&times;</span>';
+    container.appendChild(chip);
+  });
+}
+
+function addKeyword() {
+  const input = document.getElementById('keyword-input');
+  const val = input.value.trim().replace(/,$/, '');
+  if (val && !currentKeywords.includes(val)) {
+    currentKeywords.push(val);
+    renderKeywordChips();
+    markDirty();
+  }
+  input.value = '';
+}
+
+function removeKeyword(i) {
+  currentKeywords.splice(i, 1);
+  renderKeywordChips();
+  markDirty();
+}
+
+// ==================== PROFILE ====================
 function renderProfile() {
   const p = state.profile || {};
-  const fields = ['name','location','email','years','salary','languages','skills','experience','workmode'];
-  fields.forEach(f => {
-    const el = document.getElementById('p-' + f);
-    if (el && p[f]) el.value = p[f];
-  });
+  const wm = document.getElementById('p-workmode');
+  if (wm && p.workmode) wm.value = p.workmode;
 
-  // Roles
+  // Keywords
+  currentKeywords = p.keywords || [...DEFAULT_KEYWORDS];
+  renderKeywordChips();
+
+  // Roles — use data-role attribute
   const roles = p.roles || [];
   document.querySelectorAll('.role-option').forEach(opt => {
-    const roleName = opt.textContent.trim();
+    const roleName = opt.getAttribute('data-role');
     if (roles.includes(roleName)) opt.classList.add('selected');
     else opt.classList.remove('selected');
   });
 }
 
-function toggleRole(el, roleName) {
+function toggleRole(el) {
   el.classList.toggle('selected');
   markDirty();
 }
 
-function markDirty() {
-  // Just track that changes have been made
-}
+function markDirty() {}
 
 function saveProfile() {
   const roles = [];
   document.querySelectorAll('.role-option.selected').forEach(opt => {
-    roles.push(opt.textContent.trim());
+    roles.push(opt.getAttribute('data-role'));
   });
 
   state.profile = {
-    name: document.getElementById('p-name').value,
-    location: document.getElementById('p-location').value,
-    email: document.getElementById('p-email').value,
-    years: document.getElementById('p-years').value,
-    salary: document.getElementById('p-salary').value,
-    languages: document.getElementById('p-languages').value,
-    skills: document.getElementById('p-skills').value,
-    experience: document.getElementById('p-experience').value,
+    keywords: currentKeywords,
     workmode: document.getElementById('p-workmode').value,
     roles,
   };
@@ -1406,5 +1610,10 @@ load();
 renderJobs();
 document.getElementById('stat-all').classList.add('active');
 </script>
+
+  <footer>
+    <div class="footer-copy">&copy; 2026 <span>Fabien &quot;Claude&quot; Roffet</span> &middot; JobTrackerCZ</div>
+    <div class="footer-ver">v1.0 &middot; IT LEADERSHIP TRACKER &middot; CZ</div>
+  </footer>
 </body>
 </html>
